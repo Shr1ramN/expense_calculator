@@ -7,4 +7,4 @@ This is a backend service for a daily expenses sharing application. Users can ad
 
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/Shr1ramN/expense_calculator.git
