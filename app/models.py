@@ -1,16 +1,16 @@
 from pydantic import BaseModel, EmailStr, Field
-from typing import Optional
-from bson import ObjectId
+from typing import List, Optional, Dict
 
 class User(BaseModel):
-    user_id: Optional[str] = Field(default_factory=lambda: str(ObjectId()))
-    email: EmailStr
+    id: str
     name: str
+    email: EmailStr
     mobile: str
 
 class Expense(BaseModel):
-    user_id: str
-    description: str
+    id: str
+    payer: str
     amount: float
+    participants: List[str]
     split_method: str
-    splits: dict
+    splits: Optional[Dict[str, float]]  # Dictionary to store user ID and the amount they owe

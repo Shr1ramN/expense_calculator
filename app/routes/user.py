@@ -1,19 +1,31 @@
 from fastapi import APIRouter, HTTPException
+from typing import List
 from app.models import User
-from app.database import db
+from app.database import user_collection
 
 router = APIRouter()
 
-@router.post("/users/", response_model=User)
-async def create_user(user: User):
-    if db.users.find_one({"email": user.email}):
-        raise HTTPException(status_code=400, detail="Email already registered")
-    db.users.insert_one(user.dict())
-    return user
+def user_helper(user) -> dict:
+    return {
+        "id": user["id"],
+        "name": user["name"],
+        "email": user["email"],
+        "mobile": user["mobile"],
+    }
 
-@router.get("/users/{email}", response_model=User)
-async def get_user(email: str):
-    user = db.users.find_one({"email": email})
-    if not user:
+@router.post("/", response_description="Add new user", response_model=User)
+async def create_user(user: User):
+    user = user.dict()
+    existing_user = await user_collection.find_one({"id": user["id"]})
+    if existing_user:
+        raise HTTPException(status_code=400, detail="User ID already exists")
+    await user_collection.insert_one(user)
+    created_user = await user_collection.find_one({"id": user["id"]})
+    return user_helper(created_user)
+
+@router.get("/{user_id}", response_description="Get a single user", response_model=User)
+async def get_user(user_id: str):
+    user = await user_collection.find_one({"id": user_id})
+    if user is None:
         raise HTTPException(status_code=404, detail="User not found")
-    return user
+    return user_helper(user)

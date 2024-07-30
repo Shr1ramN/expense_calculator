@@ -1,8 +1,10 @@
 # Daily Expenses Sharing Application
 
-## Setup
+## Description
+This is a backend service for a daily expenses sharing application. Users can add expenses and split them among participants using exact amounts, percentages, or equal splits. The application also allows generating and downloading balance sheets.
 
-1. Clone the repository
-2. Install dependencies:
+## Setup and Installation
+
+1. Clone the repository:
    ```bash
-   pip install -r requirements.txt
+   git clone <repository-url>
